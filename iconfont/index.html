@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" href="iconfont/iconfont.css">
+	<script src="js/jquery1.12.3.js"></script>
+	<script src="js/index.js"></script>
+</head>
+<body>
+	<div class="box">
+		<div class="order iconfont">
+			<ul class="start">
+				<li class="back" title="后退">&#xe600;</li>
+				<li class="clear" title="刷新">&#xe602;</li>
+				<li class="rubber" title="橡皮">&#xe608;</li>
+				<li class="reseve" title="另存">&#xe608;</li>				
+			</ul>
+			<ul class="shape">
+				<li class="pencil" title="铅笔工具">&#xe603;</li>
+				<li class="line" title="直线">&#xe601;</li>
+				<li class="rect" title="矩形">&#xe605;</li>
+				<li class="arc" title="圆形">&#xe604;</li>
+				<li class="polygon" title="多边形">&#xe606;</li>
+				<li class="star" title="星形" >&#xe607;</li>
+			</ul>
+			<ul class="type" style="border:none">
+				<li><input type="range" max="20" min="1" value="1" class="lineWidth">
+					边框宽度:<span>1</span></li>
+				<li title="描边">
+					<input type="checkbox" checked> 
+					描边: <input type="color" class="strokeStyle" ></li>
+				<li title="填充">
+					<input type="checkbox" class="radio"> 
+					填充: <input type="color" class="fillStyle"></li>
+			</ul>
+		</div>
+		<div class="right">
+			<canvas width="1250px" height="650px"></canvas>
+		</div>
+		<div class="copy">
+			切换背景颜色: <input type="color" class="bgcolor"></li>
+		</div>
+	</div>
+</body>
+	<script>
+		var canvas=document.querySelector("canvas");
+        var cobj=canvas.getContext("2d");
+        var shape=new Shape(canvas,cobj);
+		var lis=$(".shape li");
+
+
+		// 边框颜色和粗细.填充颜色
+        var types=$(".type li input")
+        var widths= $(".type li span")
+
+		types.change(function(){
+			shape[this.className]=this.value;
+			widths.html(types[0].value);
+		})
+
+		// 是否填充
+		var radio=$(".radio")
+		radio.change(function () {
+			if (this.checked) {
+				shape.style="fill";
+			}else{
+				shape.style="stroke";
+			}
+		})
+
+		// 切换形状
+
+		lis.click(function(){
+			var index=$(this).index()
+			shape.type=this.className;
+			$(this).css({color:"white"});
+			document.body.style.cursor="auto";
+			if(index>=2){
+				document.body.style.cursor="crosshair";	
+			}
+			if (index>=4) {
+				var num=prompt("请输入边数/角数","5");
+				if (num<3) {
+					alert("请至少输入3边/角以上")
+					return;
+				};	
+				shape.side=num;				
+			}			
+			shape.draw()
+		})
+
+
+		// 切换功能
+		var starts=$(".start li")
+		starts.click(function () {
+			shape[this.className]()
+        })
+
+        // 切换背景颜色
+        var bgcolor=$(".bgcolor")
+		bgcolor.change(function () {
+			document.body.style.background=this.value;
+        }) 
+             
+	</script>
+</html>
